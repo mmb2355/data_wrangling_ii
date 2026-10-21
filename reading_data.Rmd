@@ -10,6 +10,7 @@ editor_options:
 library(tidyverse)
 library(rvest)
 library(httr)
+library(chromote)
 ```
 
 ## scrape table
@@ -29,11 +30,50 @@ extract table(s); focus on first one
 ```{r}
 table_mj =
   drug_use_html |> 
-  html_element(css = "table") |> 
   html_table() |> 
+  first() |> 
   slice(-1)
 ```
 
-* html_element: extract html with css tag, selects first list
+* first: selects first element
 * html_table: prints html into table
 * slice: removes row
+
+## Star Wars movie info
+
+I want the data from [here](https://www.imdb.com/list/ls070150896/)
+
+```{r}
+sw_html = 
+  read_html_live("https://www.imdb.com/list/ls070150896/")
+```
+
+* read_html_live helps with non-html files
+
+grab elements i want
+
+```{r}
+title_vec =
+  sw_html |> 
+  html_elements(".ipc-title-link-wrapper .ipc-title__text") |> 
+  html_text()
+  
+metascore_vec = 
+  sw_html |>
+  html_elements(".metacritic-score-box") |>
+  html_text()
+
+runtime_vec = 
+  sw_html |>
+  html_elements(".base .ipc-inline-list__item:nth-child(2)") |>
+  html_text()
+
+sw_df = 
+  tibble(
+    title = title_vec,
+    score = metascore_vec,
+    runtime = runtime_vec)
+```
+
+* html_element: extract html with css tag, selects first element automatically
+* html_text: converts html to text
