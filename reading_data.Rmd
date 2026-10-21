@@ -1,0 +1,39 @@
+---
+title: "Reading Data From the Web"
+output: github_document
+date: "2026-10-21"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(tidyverse)
+library(rvest)
+library(httr)
+```
+
+## scrape table
+
+i want the first table from [this page](https://www.samhsa.gov/data/sites/default/files/NSDUHsaeShortTermCHG2015/NSDUHsaeShortTermCHG2015.htm)
+
+read in the html
+
+```{r}
+url = "https://www.samhsa.gov/data/sites/default/files/NSDUHsaeShortTermCHG2015/NSDUHsaeShortTermCHG2015.htm"
+
+drug_use_html = read_html(url)
+```
+
+extract table(s); focus on first one
+
+```{r}
+table_mj =
+  drug_use_html |> 
+  html_element(css = "table") |> 
+  html_table() |> 
+  slice(-1)
+```
+
+* html_element: extract html with css tag, selects first list
+* html_table: prints html into table
+* slice: removes row
