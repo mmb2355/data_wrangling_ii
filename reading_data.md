@@ -46,6 +46,8 @@ url = "https://www.samhsa.gov/data/sites/default/files/NSDUHsaeShortTermCHG2015/
 drug_use_html = read_html(url)
 ```
 
+- use rvest package for html data
+
 extract table(s); focus on first one
 
 ``` r
@@ -96,6 +98,30 @@ sw_df =
     runtime = runtime_vec)
 ```
 
+- use chromote package to do this!
 - html_element: extract html with css tag, selects first element
   automatically
 - html_text: converts html to text
+
+## get some water data
+
+this is coming from an API
+
+``` r
+nyc_water = 
+  GET("https://data.cityofnewyork.us/api/v3/views/ia2d-e54m/query.csv") |> 
+  content("parsed")
+```
+
+    ## Rows: 65 Columns: 8
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr  (2): :id, :version
+    ## dbl  (4): year, new_york_city_population, nyc_consumption_million_gallons_pe...
+    ## dttm (2): :created_at, :updated_at
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+- GET: from httr package
+- content(“parsed”): goes from html to tibble
