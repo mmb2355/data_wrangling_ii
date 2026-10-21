@@ -78,7 +78,7 @@ sw_df =
 ```
 
 * use chromote package to do this!
-* html_element: extract html with css tag, selects first element automatically
+* html_element: extracts html, selects first element automatically
 * html_text: converts html to text
 
 ## get some water data
@@ -93,3 +93,27 @@ nyc_water =
 
 * GET: from httr package
 * content("parsed"): goes from html to tibble
+
+## BRPSS dataset
+
+same process, different data
+
+```{r}
+brfss_2010 = 
+  GET("https://chronicdata.cdc.gov/api/v3/views/acme-vg9e/query.csv") |> 
+  content("parsed")
+```
+
+## some data aren't nice...complicated
+
+pokemon
+
+```{r}
+pokemon = 
+  GET("http://pokeapi.co/api/v2/pokemon/1") |>
+  content()
+
+pokemon[["name"]]
+pokemon[["height"]]
+pokemon[["abilities"]]
+```
