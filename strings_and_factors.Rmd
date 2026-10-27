@@ -1,0 +1,128 @@
+---
+title: "Strings and Factors"
+output: github_document
+date: "2026-10-26"
+editor_options: 
+  chunk_output_type: console
+---
+```{r setup, include = FALSE}
+library(tidyverse)
+library(p8105.datasets)
+library(rvest)
+
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+## strings and regex
+
+```{r}
+string_vec = c("my", "name", "is", "meghan")
+
+str_detect(string_vec, "meghan")
+str_replace(string_vec, "meghan", "Meghan")
+```
+
+* `str_detect`: detects patterns of character vectors (words, letters, number) that is either true or false. CASE SENSITIVE!
+* so meghan is true 1 out of the 4 vectors, m is true 3 out of 4, etc. 
+* `str_replace`: replaces character vector with whatever character word/letter/number
+
+```{r}
+string_vec = c(
+  "i think we all rule for participating",
+  "i think i have been caught",
+  "i think this will be quite fun actually",
+  "it will be fun, i think"
+  )
+
+str_detect(string_vec, "^i think")
+str_detect(string_vec, "i think$")
+```
+
+* `^` at the beginning of the phrase line, so vectors that start with "i think"
+* `$` at the end of the phrase line, so vectors that ends with "i think"
+
+```{r}
+string_vec = c(
+  "Time for a Pumpkin Spice Latte!",
+  "went to the #pumpkinpatch last weekend",
+  "Pumpkin Pie is obviously the best pie",
+  "SMASHING PUMPKINS -- LIVE IN CONCERT!!"
+  )
+
+str_detect(string_vec,"[Pp]umpkin")
+```
+
+* `[]` grabs lower- and uppercase...NOT case sensitive!
+
+```{r}
+string_vec = c(
+  '7th inning stretch',
+  '1st half soon to begin. Texas won the toss.',
+  'she is 5 feet 4 inches tall',
+  '3AM - cant sleep :('
+  )
+
+str_detect(string_vec, "^[0-9][a-zA-Z]")
+```
+
+* number first, followed by a letter after (ex. rankings)
+
+```{r}
+string_vec = c(
+  'Its 7:11 in the evening',
+  'want to go to 7-11?',
+  'my flight is AA711',
+  'NetBios: scanning ip 203.167.114.66'
+  )
+
+str_detect(string_vec, "7.11")
+str_detect(string_vec, "7\\.11")
+```
+
+* adding a `.` is a special character that captures a character between the specified number/letter
+* `\\` is a special character and it gets the exact character, no other combinations
+
+```{r}
+string_vec = c(
+  'The CI is [2, 5]',
+  ':-]',
+  ':-[',
+  'I found the answer on pages [6-7]'
+  )
+
+str_detect(string_vec, "\\[")
+```
+
+## factors
+
+```{r}
+factor_vec = factor(c("male", "male", "female", "female"))
+
+as.numeric(factor_vec)
+```
+
+* `as.numeric`: converts character vector into values
+
+what happens if i relevel?
+
+```{r}
+factor_vec = fct_relevel(factor_vec, "male")
+
+as.numeric(factor_vec)
+```
+
+* `fct_relevel`: reassigns factor character to a position...before, values are automatically are ordered alphabetically
