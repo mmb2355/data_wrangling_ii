@@ -138,3 +138,39 @@ as.numeric(factor_vec)
 
 - `fct_relevel`: reassigns factor character to a position…before, values
   are automatically are ordered alphabetically
+
+## NSDUH – strings
+
+``` r
+url = "https://www.samhsa.gov/data/sites/default/files/NSDUHsaeShortTermCHG2015/NSDUHsaeShortTermCHG2015.htm"
+
+table_mj =
+  read_html(url) |> 
+  html_table() |> 
+  first() |> 
+  slice(-1)
+```
+
+``` r
+data_mj =
+  table_mj |> 
+  select(-contains("P Value")) |> 
+  pivot_longer(
+    -State,
+    names_to = "age_year",
+    values_to = "percent"
+  ) |> 
+  separate(age_year, into = c("age","year"), sep = "\\(") |> 
+  mutate(
+    year = str_replace(year, "\\)", ""),
+    percent = str_replace(percent, "[a-c]$",""),
+    percent = as.numeric(percent)
+  ) |> 
+  filter(!(State %in% c("Total U.S.", "Northeast", "Midwest", "South", "West")))
+```
+
+- `contains` similar to `str_detect`
+- the dash (`-`) indicates a removal (no dash means inclusion)
+- `sep =`similar to `str_detect`, but for `separate` function
+- `!`: don’t want it, filter it out
+- `%in%`: selecting which characters to filter
