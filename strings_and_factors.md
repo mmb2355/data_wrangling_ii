@@ -174,3 +174,20 @@ data_mj =
 - `sep =`similar to `str_detect`, but for `separate` function
 - `!`: don’t want it, filter it out
 - `%in%`: selecting which characters to filter
+
+## NSDUH – factors
+
+``` r
+data_mj |> 
+  filter(age == "12-17") |> 
+  mutate(State = fct_reorder(State, percent)) |> 
+  ggplot(aes(x = State, y = percent, color = year)) +
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+<img src="strings_and_factors_files/figure-gfm/unnamed-chunk-11-1.png" alt="" width="90%" />
+
+- `fct_reorder`: orders one character (State) based on another character
+  (percent) and takes the median value of character 1; it ranks lowest
+  to highest

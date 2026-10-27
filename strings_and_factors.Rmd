@@ -162,3 +162,16 @@ data_mj =
 * `sep = `similar to `str_detect`, but for `separate` function
 * `!`: don't want it, filter it out
 * `%in%`: selecting which characters to filter
+
+## NSDUH -- factors
+
+```{r}
+data_mj |> 
+  filter(age == "12-17") |> 
+  mutate(State = fct_reorder(State, percent)) |> 
+  ggplot(aes(x = State, y = percent, color = year)) +
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+* `fct_reorder`: orders one character (State) based on another character (percent) and takes the median value of character 1; it ranks lowest to highest
