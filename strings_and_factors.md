@@ -189,5 +189,65 @@ data_mj |>
 <img src="strings_and_factors_files/figure-gfm/unnamed-chunk-11-1.png" alt="" width="90%" />
 
 - `fct_reorder`: orders one character (State) based on another character
-  (percent) and takes the median value of character 1; it ranks lowest
-  to highest
+  (percent) and takes the median value of the first character; it ranks
+  lowest to highest
+
+## weather data
+
+``` r
+data("weather_df")
+
+weather_df |> 
+  mutate(name = fct_reorder(name, tmax)) |> 
+  ggplot(aes(x = name, y = tmax))+
+  geom_violin()
+```
+
+    ## Warning: There was 1 warning in `mutate()`.
+    ## ℹ In argument: `name = fct_reorder(name, tmax)`.
+    ## Caused by warning:
+    ## ! `fct_reorder()` removing 17 missing values.
+    ## ℹ Use `.na_rm = TRUE` to silence this message.
+    ## ℹ Use `.na_rm = FALSE` to preserve NAs.
+
+    ## Warning: Removed 17 rows containing non-finite outside the scale range
+    ## (`stat_ydensity()`).
+
+<img src="strings_and_factors_files/figure-gfm/unnamed-chunk-12-1.png" alt="" width="90%" />
+
+``` r
+weather_df |> 
+  mutate(name = fct_reorder(name, tmax)) |> 
+  lm(tmax ~ name, data = _)
+```
+
+    ## Warning: There was 1 warning in `mutate()`.
+    ## ℹ In argument: `name = fct_reorder(name, tmax)`.
+    ## Caused by warning:
+    ## ! `fct_reorder()` removing 17 missing values.
+    ## ℹ Use `.na_rm = TRUE` to silence this message.
+    ## ℹ Use `.na_rm = FALSE` to preserve NAs.
+
+    ## 
+    ## Call:
+    ## lm(formula = tmax ~ name, data = mutate(weather_df, name = fct_reorder(name, 
+    ##     tmax)))
+    ## 
+    ## Coefficients:
+    ##        (Intercept)  nameCentralPark_NY      nameMolokai_HI  
+    ##               7.38               10.28               20.94
+
+- `lm`: regression
+
+``` r
+weather_df |>
+  mutate(name = forcats::fct_relevel(name, c("Molokai_HI", "CentralPark_NY", "Waterhole_WA"))) |> 
+  ggplot(aes(x = name, y = tmax)) + 
+  geom_violin(aes(fill = name), color = "blue", alpha = .5) + 
+  theme(legend.position = "bottom")
+```
+
+    ## Warning: Removed 17 rows containing non-finite outside the scale range
+    ## (`stat_ydensity()`).
+
+<img src="strings_and_factors_files/figure-gfm/unnamed-chunk-14-1.png" alt="" width="90%" />

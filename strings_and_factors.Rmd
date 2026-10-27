@@ -174,4 +174,31 @@ data_mj |>
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
-* `fct_reorder`: orders one character (State) based on another character (percent) and takes the median value of character 1; it ranks lowest to highest
+* `fct_reorder`: orders one character (State) based on another character (percent) and takes the median value of the first character; it ranks lowest to highest
+
+## weather data
+
+```{r}
+data("weather_df")
+
+weather_df |> 
+  mutate(name = fct_reorder(name, tmax)) |> 
+  ggplot(aes(x = name, y = tmax))+
+  geom_violin()
+```
+
+```{r}
+weather_df |> 
+  mutate(name = fct_reorder(name, tmax)) |> 
+  lm(tmax ~ name, data = _)
+```
+
+* `lm`: regression
+
+```{r}
+weather_df |>
+  mutate(name = forcats::fct_relevel(name, c("Molokai_HI", "CentralPark_NY", "Waterhole_WA"))) |> 
+  ggplot(aes(x = name, y = tmax)) + 
+  geom_violin(aes(fill = name), color = "blue", alpha = .5) + 
+  theme(legend.position = "bottom")
+```
